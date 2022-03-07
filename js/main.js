@@ -17,9 +17,7 @@ function getStrLength (str, length) {
 
 getStrLength ('Привет', 10);
 
-const getRandomArrayElement = (array) => {
-  return array[getRandomInteger(0, array.length - 1)];
-}
+const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 function createIdGenerator () {
   let lastGeneratedId = 0;
@@ -58,12 +56,10 @@ const createComment = () => {
     avatar: getRandomInteger(1, 6),
     message: getRandomArrayElement(COMMENTS),
     name: getRandomArrayElement(NAMES),
-  }
-}
+  };
+};
 
-const similarCommentsArray = () => {
-  return Array.from({length: getRandomInteger(1, 10)}, createComment);
-}
+const similarCommentsArray = () => Array.from({length: getRandomInteger(1, 10)}, createComment);
 
 const createPhotoObject = () => {
   return {
@@ -73,6 +69,9 @@ const createPhotoObject = () => {
     likes: getRandomInteger(15, 200),
     comments: similarCommentsArray(),
   };
-}
+};
 
-const similarPhotoObjects = Array.from({length: SIMILAR_PHOTO_COUNT}, createPhotoObject);
+const createSimilarPhotoObjects = () => Array.from({length: SIMILAR_PHOTO_COUNT}, createPhotoObject);
+
+createSimilarPhotoObjects();
+
