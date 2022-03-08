@@ -50,26 +50,22 @@ const generatePhotoId = createIdGenerator();
 const generateCommentId = createIdGenerator();
 const generatePhotoURL = createIdGenerator();
 
-const createComment = () => {
-  return {
-    id: generateCommentId(),
-    avatar: getRandomInteger(1, 6),
-    message: getRandomArrayElement(COMMENTS),
-    name: getRandomArrayElement(NAMES),
-  };
-};
+const createComment = () => ({
+  id: generateCommentId(),
+  avatar: getRandomInteger(1, 6),
+  message: getRandomArrayElement(COMMENTS),
+  name: getRandomArrayElement(NAMES),
+});
 
 const similarCommentsArray = () => Array.from({length: getRandomInteger(1, 10)}, createComment);
 
-const createPhotoObject = () => {
-  return {
-    id : generatePhotoId(),
-    url: `photos/${generatePhotoURL()}.jpg`,
-    description: 'Описание фотографии',
-    likes: getRandomInteger(15, 200),
-    comments: similarCommentsArray(),
-  };
-};
+const createPhotoObject = () => ({
+  id : generatePhotoId(),
+  url: `photos/${generatePhotoURL()}.jpg`,
+  description: 'Описание фотографии',
+  likes: getRandomInteger(15, 200),
+  comments: similarCommentsArray(),
+});
 
 const createSimilarPhotoObjects = () => Array.from({length: SIMILAR_PHOTO_COUNT}, createPhotoObject);
 
