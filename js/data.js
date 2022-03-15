@@ -58,4 +58,4 @@ const createPhotoObject = () => ({
 
 const createSimilarPhotoObjects = () => Array.from({length: SIMILAR_PHOTO_COUNT}, createPhotoObject);
 
-createSimilarPhotoObjects();
+export {createSimilarPhotoObjects};
