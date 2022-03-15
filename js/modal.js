@@ -8,9 +8,18 @@ const socialCommentsCount = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 const commentElementTemplate = bigPicture.querySelector('.social__comment');
 
-for (let i = 0; i < thumbnails.length; i++) {
-  thumbnails[i].addEventListener('click', () => {
-    const {url, likes, comments, description} = similarThumbnails[i];
+thumbnails.forEach((thumbnail, index) => {
+  thumbnail.addEventListener('click', () => {
+    const {url, likes, comments, description} = similarThumbnails[index];
+
+    const createSocialComment = (commentary) => {
+      const commentElement = commentElementTemplate.cloneNode(true);
+      commentElement.querySelector('.social__picture').src = `img/avatar-${commentary.avatar}.svg`;
+      commentElement.querySelector('.social__picture').alt = commentary.name;
+      commentElement.querySelector('.social__text').textContent = commentary.message;
+      commentsList.append(commentElement);
+    };
+
     document.body.classList.add('modal-open');
     socialCommentsCount.classList.add('hidden');
     commentsLoader.classList.add('hidden');
@@ -19,13 +28,7 @@ for (let i = 0; i < thumbnails.length; i++) {
     bigPicture.querySelector('.likes-count').textContent = likes;
     bigPicture.querySelector('.comments-count').textContent = comments.length;
     commentsList.innerHTML = '';
-    comments.forEach((comment) => {
-      const commentElement = commentElementTemplate.cloneNode(true);
-      commentElement.querySelector('.social__picture').src = `img/avatar-${comment.avatar}.svg`;
-      commentElement.querySelector('.social__picture').alt = comment.name;
-      commentElement.querySelector('.social__text').textContent = comment.message;
-      commentsList.append(commentElement);
-    });
+    comments.forEach((comment) => createSocialComment(comment));
     bigPicture.querySelector('.social__caption').textContent = description;
 
     bigPictureCloseButton.addEventListener('click', () => {
@@ -38,5 +41,5 @@ for (let i = 0; i < thumbnails.length; i++) {
       }
     });
   });
-}
+});
 
