@@ -1,4 +1,5 @@
 import {createSimilarPhotoObjects} from './data.js';
+import {createPopup} from './modal.js';
 
 const thumbnailsList = document.querySelector('.pictures');
 const similarThumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -15,4 +16,10 @@ similarThumbnails.forEach(({url, comments, likes}) => {
 
 thumbnailsList.append(thumbnailsListFragment);
 
-export {similarThumbnails, thumbnailsList};
+const thumbnails = thumbnailsList.querySelectorAll('.picture');
+
+thumbnails.forEach((thumbnail, index) => {
+  thumbnail.addEventListener('click', () => {
+    createPopup(similarThumbnails, index);
+  });
+});
