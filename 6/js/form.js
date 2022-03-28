@@ -11,9 +11,14 @@ const inputsField = document.querySelector('.img-upload__text');
 const hashtagInput = hashtagInputTemplate.cloneNode(true);
 const commentaryInput = commentaryInputTemplate.cloneNode(true);
 
+const REGEXP = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+const MIN_HASHTAG_LENGTH = 2;
+const MAX_HASHTAG_LENGTH = 20;
+const MAX_HASHTAGS = 5;
+const MAX_COMMENTARY_LENGTH = 140;
+
 inputsField.innerHTML = '';
 
-//Создал обертку для полей ввода хэштега и комментариев, чтобы pristine отображал результат проверки под соотв. полями
 const divHashtagInputContainer = document.createElement('div');
 const divCommentaryInputContainer = document.createElement('div');
 divHashtagInputContainer.classList.add('text__input-container');
@@ -72,16 +77,19 @@ const pristine = new Pristine(form, {
 });
 
 function getHashtagErrorMessage () {
-  const regexp = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
   const hashtagArray = hashtagInput.value.split(' ');
-  const hashtagArrayCompare = [...new Set(hashtagArray)]; // создал копию массива методом Set, который удаляет повторяющиеся хэштеги и сравнид, отличаются ли массивы
+  const uniqueHashtags = new Set(hashtagArray);
 
-  if (hashtagInput.value.length < 2 || hashtagInput.value.length > 20) {
-    return 'Не менее 2 и не более 20 символов в хэштеге';
+  if (hashtagArray.length > MAX_HASHTAGS) {
+    return 'Не более пяти хэштегов';
   }
 
   for (const hashtag of hashtagArray) {
-    if (!regexp.test(hashtag)) {
+    if (hashtag.length < MIN_HASHTAG_LENGTH || hashtag.length > MAX_HASHTAG_LENGTH) {
+      return 'Не менее 2 и не более 20 символов в хэштеге';
+    }
+
+    if (!REGEXP.test(hashtag)) {
       return 'Только буквы и цифры после символа #';
     }
 
@@ -90,32 +98,29 @@ function getHashtagErrorMessage () {
     }
   }
 
-  for (let i = 0; i < hashtagArray.length; i++) {
-    if (hashtagArrayCompare[i] !== hashtagArray[i]) {
-      return 'Не должно быть одинаковых хэштегов';
-    }
+  if (uniqueHashtags.size !== hashtagArray.length) {
+    return 'Не должно быть одинаковых хэштегов';
   }
 }
 
-function validateHashtag (value) {
-  const regexp = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-  const hashtagArray = value.split(' ');
-  const hashtagArrayCompare = [...new Set(hashtagArray)];
+function validateHashtag () {
+  const hashtagArray = hashtagInput.value.split(' ');
+  const uniqueHashtags = new Set(hashtagArray);
 
-  if (value === '') {
+  if (hashtagInput.value === '') {
     return true;
   }
 
-  if (hashtagArray.length > 5) {
+  if (hashtagArray.length > MAX_HASHTAGS) {
     return false;
   }
 
   for (const hashtag of hashtagArray) {
-    if (!hashtag.length >= 2 && !hashtag.length < 20) {
+    if (!hashtag.length >= MIN_HASHTAG_LENGTH && !hashtag.length < MAX_HASHTAG_LENGTH) {
       return false;
     }
 
-    if (!regexp.test(hashtag)) {
+    if (!REGEXP.test(hashtag)) {
       return false;
     }
 
@@ -124,17 +129,15 @@ function validateHashtag (value) {
     }
   }
 
-  for (let i = 0; i < hashtagArray.length; i++) {
-    if (hashtagArrayCompare[i] !== hashtagArray[i]) {
-      return false;
-    }
+  if (uniqueHashtags.size !== hashtagArray.length) {
+    return false;
   }
 
   return true;
 }
 
 function validateCommentary (value) {
-  return value.length <= 140;
+  return value.length <= MAX_COMMENTARY_LENGTH;
 }
 
 pristine.addValidator(
