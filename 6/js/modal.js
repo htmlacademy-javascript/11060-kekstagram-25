@@ -3,7 +3,7 @@ import {isEscapeKey} from './util.js';
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCloseButton = document.querySelector('.big-picture__cancel');
 const commentsList = bigPicture.querySelector('.social__comments');
-//const socialCommentsCount = bigPicture.querySelector('.social__comment-count');
+const socialCommentsCount = bigPicture.querySelector('.social__comment-count');
 const commentsLoaderButton = bigPicture.querySelector('.comments-loader');
 const commentElementTemplate = bigPicture.querySelector('.social__comment');
 const COMMENTS_COUNT_PER_STEP = 5;
@@ -34,24 +34,26 @@ const createAllComments = (commentaries) => {
   if (commentaries.length <= COMMENTS_COUNT_PER_STEP) {
     commentaries.forEach((commentary) => createComment(commentary));
     commentsLoaderButton.classList.add('hidden');
+    socialCommentsCount.innerHTML = `${commentaries.length} из <span class='comments-count'>${commentaries.length}</span> комментариев`;
 
   } else {
     commentsLoaderButton.classList.remove('hidden');
     for (let i = 0; i < COMMENTS_COUNT_PER_STEP; i++) {
       createComment(commentaries[i]);
+      socialCommentsCount.innerHTML = `${renderedCommentsCount} из <span class='comments-count'>${commentaries.length}</span> комментариев`;
     }
 
     commentsLoaderButton.addEventListener('click', () => {
-      console.log('До сложения ' + renderedCommentsCount);
       commentaries
         .slice(renderedCommentsCount, renderedCommentsCount + COMMENTS_COUNT_PER_STEP)
         .forEach((commentary) => createComment(commentary));
 
       renderedCommentsCount += COMMENTS_COUNT_PER_STEP;
-      console.log('После сложения ' + renderedCommentsCount);
+      socialCommentsCount.innerHTML = `${renderedCommentsCount} из <span class='comments-count'>${commentaries.length}</span> комментариев`;
       if (renderedCommentsCount > commentaries.length) {
         renderedCommentsCount = COMMENTS_COUNT_PER_STEP;
         commentsLoaderButton.classList.add('hidden');
+        socialCommentsCount.innerHTML = `${commentaries.length} из <span class='comments-count'>${commentaries.length}</span> комментариев`;
       }
     });
   }
@@ -64,7 +66,7 @@ const createPopup = (similarThumbnail, index) => {
   bigPicture.classList.remove('hidden');
   bigPicture.querySelector('img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
-  bigPicture.querySelector('.comments-count').textContent = comments.length;
+  //bigPicture.querySelector('.comments-count').textContent = comments.length;
   //commentsList.innerHTML = '';
   [...commentsList.children].forEach((node) => node.remove());
   createAllComments(comments);
