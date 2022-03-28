@@ -3,7 +3,7 @@ import {getRandomInteger, getRandomArrayElement} from './util.js';
 
 const SIMILAR_PHOTO_COUNT = 25;
 const COMMENTS_MIN_VALUE = 1;
-const COMMENTS_MAX_VALUE = 10;
+const COMMENTS_MAX_VALUE = 20;
 const AVATAR_MIN_VALUE = 1;
 const AVATAR_MAX_VALUE = 6;
 const LIKES_MIN_VALUE = 15;
