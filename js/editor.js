@@ -8,34 +8,46 @@ const effectsSliderContainer = document.querySelector('.img-upload__effect-level
 const effectLevel = document.querySelector('.effect-level__value');
 
 const filtersMap = {
+  none: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+    points: '',
+  },
   chrome: {
     min: 0,
     max: 1,
     step: 0.1,
+    points: '',
   },
   sepia: {
     min: 0,
     max: 1,
     step: 0.1,
+    points: '',
   },
   marvin: {
     min: 0,
     max: 100,
     step: 1,
+    points: '%',
   },
   phobos: {
     min: 0,
     max: 3,
     step: 0.1,
+    points: 'px',
   },
   heat: {
     min: 1,
     max: 3,
     step: 0.1,
+    points: '',
   },
 };
 
 const filtersEffects = {
+  none: '',
   chrome: 'grayscale',
   sepia: 'sepia',
   marvin: 'invert',
@@ -54,10 +66,12 @@ image.style.transform = `scale(${defaultScale})`;
 scaleDownButton.addEventListener('click', () => {
   defaultScaleValue -= 25;
   defaultScale -= 0.25;
+
   if (defaultScaleValue <= 25 && defaultScale <= 0.25) {
     defaultScaleValue = 25;
     defaultScale = 0.25;
   }
+
   scaleValue.setAttribute('value', `${defaultScaleValue}%`);
   image.style.transform = `scale(${defaultScale})`;
 });
@@ -65,10 +79,12 @@ scaleDownButton.addEventListener('click', () => {
 scaleUpButton.addEventListener('click', () => {
   defaultScaleValue += 25;
   defaultScale += 0.25;
+
   if (defaultScaleValue >= 100 && defaultScale >= 1) {
     defaultScaleValue = 100;
     defaultScale = 1;
   }
+
   scaleValue.setAttribute('value', `${defaultScaleValue}%`);
   image.style.transform = `scale(${defaultScale})`;
 });
@@ -90,11 +106,12 @@ function onFilterListClick (evt) {
 
   if (evt.target.value === 'none') {
     effectsSliderContainer.classList.add('hidden');
+
   } else {
     effectsSliderContainer.classList.remove('hidden');
   }
 
-  if (evt.target.matches('input[type="radio"]' || !evt.target.value === 'none')) {
+  if (evt.target.matches('input[type="radio"]')) {
     sliderElement.noUiSlider.updateOptions({
       range: {
         min: filtersMap[evt.target.value].min,
@@ -107,7 +124,7 @@ function onFilterListClick (evt) {
     sliderElement.noUiSlider.on('update', () => {
       const effectValue = +sliderElement.noUiSlider.get();
       effectLevel.setAttribute('value', effectValue);
-      image.style.filter = `${filtersEffects[evt.target.value]}(${effectValue})`;
+      image.style.filter = `${filtersEffects[evt.target.value]}(${effectValue}${filtersMap[evt.target.value].points})`;
     });
   }
 }
