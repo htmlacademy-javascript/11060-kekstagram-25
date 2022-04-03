@@ -37,7 +37,7 @@ const setCommentsCount = (count, commentLength) => {
 
 const createComment = (commentary) => {
   const commentElement = commentElementTemplate.cloneNode(true);
-  commentElement.querySelector('.social__picture').src = `img/avatar-${commentary.avatar}.svg`;
+  commentElement.querySelector('.social__picture').src = commentary.avatar;
   commentElement.querySelector('.social__picture').alt = commentary.name;
   commentElement.querySelector('.social__text').textContent = commentary.message;
   commentsList.append(commentElement);

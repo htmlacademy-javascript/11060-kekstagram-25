@@ -1,5 +1,7 @@
 import {isEscapeKey} from './util.js';
 import {getHashtagErrorMessage, validateHashtag, validateCommentary} from './validate.js';
+import {sendData} from './api.js';
+import {editorReset} from './editor.js';
 
 const form = document.querySelector('.img-upload__form');
 const uploadFileForm = document.querySelector('#upload-file');
@@ -7,6 +9,7 @@ const imageEditorForm = document.querySelector('.img-upload__overlay');
 const closeImageEditorButton = document.querySelector('#upload-cancel');
 const hashtagInputTemplate = document.querySelector('.text__hashtags');
 const commentaryInputTemplate = document.querySelector('.text__description');
+const submitButton = document.querySelector('.img-upload__submit');
 
 const inputsField = document.querySelector('.img-upload__text');
 const hashtagInput = hashtagInputTemplate.cloneNode(true);
@@ -32,6 +35,7 @@ function closeImageEditor () {
   imageEditorForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadFileForm.value = '';
+  editorReset();
 }
 
 const onEditorEscKeydown = (evt) => {
@@ -71,21 +75,92 @@ const pristine = new Pristine(form, {
   errorTextClass: 'form__error'
 });
 
-pristine.addValidator(
-  hashtagInput,
-  validateHashtag,
-  getHashtagErrorMessage
-);
+pristine.addValidator(hashtagInput, validateHashtag, getHashtagErrorMessage);
+pristine.addValidator(commentaryInput, validateCommentary, 'Не более 140 символов');
 
-pristine.addValidator(
-  commentaryInput,
-  validateCommentary,
-  'Не более 140 символов'
-);
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+function onError () {
+  const errorTemplate = document.querySelector('#error').content;
+  const error = errorTemplate.cloneNode(true);
+  document.body.append(error);
+  closeImageEditor();
+  const onErrorBlock = document.querySelector('.error');
+  const onErrorButton = onErrorBlock.querySelector('.error__button');
+
+  onErrorButton.addEventListener('click', () => {
+    onErrorBlock.remove();
+  }, {once: true});
+
+  const onErrorEscKeydown = (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      onErrorBlock.remove();
+    }
+  };
+
+  window.addEventListener('keydown', onErrorEscKeydown);
+
+  window.addEventListener('click', (evt) => {
+    if (evt.target === onErrorBlock) {
+      onErrorBlock.remove();
+    }
+  }, {once: true});
+}
+
+function onSuccess () {
+  const successTemplate = document.querySelector('#success').content;
+  const success = successTemplate.cloneNode(true);
+  document.body.append(success);
+  const onSuccessBlock = document.querySelector('.success');
+  const onSuccessButton = onSuccessBlock.querySelector('.success__button');
+  closeImageEditor();
+  editorReset();
+
+  onSuccessButton.addEventListener('click', () => {
+    onSuccessBlock.remove();
+  }, {once: true});
+
+  const onSuccessEscKeydown = (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      onSuccessBlock.remove();
+    }
+  };
+
+  window.addEventListener('keydown', onSuccessEscKeydown);
+
+  window.addEventListener('click', (evt) => {
+    if (evt.target === onSuccessBlock) {
+      onSuccessBlock.remove();
+    }
+  }, {once: true});
+}
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
+  const isValid = pristine.validate();
+  if (isValid) {
+    blockSubmitButton();
+    sendData(
+      () => {
+        onSuccess();
+        unblockSubmitButton();
+      },
+      () => {
+        onError();
+        unblockSubmitButton();
+      },
+      new FormData(evt.target),
+    );
+  }
 });
-
 
