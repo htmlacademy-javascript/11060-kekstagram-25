@@ -49,7 +49,6 @@ const createComment = (commentary) => {
 };
 
 const createAllComments = (commentaries) => {
-  console.log(commentaries);
   let renderedCommentsCount = COMMENTS_COUNT_PER_STEP;
   commentsLoaderButton.remove();
   const moreCommentsButton = createCommentButton();
