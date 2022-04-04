@@ -55,6 +55,9 @@ const filtersEffects = {
   heat: 'brightness',
 };
 
+const DEFAULT_SCALE_VALUE = 100;
+const DEFAULT_TRANSFORM_VALUE = 1;
+
 scaleValue.removeAttribute('readonly');
 
 let defaultScaleValue = 100;
@@ -125,8 +128,26 @@ function onFilterListClick (evt) {
       const effectValue = +sliderElement.noUiSlider.get();
       effectLevel.setAttribute('value', effectValue);
       image.style.filter = `${filtersEffects[evt.target.value]}(${effectValue}${filtersMap[evt.target.value].points})`;
+
+      if (evt.target.value === 'none' && image.style.filter) {
+        image.removeAttribute('style');
+      }
     });
   }
 }
 
 effectsList.addEventListener('click', onFilterListClick);
+
+function editorReset () {
+  effectsSliderContainer.classList.add('hidden');
+  scaleValue.setAttribute('value', `${DEFAULT_SCALE_VALUE}%`);
+  effectLevel.setAttribute('value', DEFAULT_SCALE_VALUE);
+  sliderElement.noUiSlider.updateOptions({start: DEFAULT_SCALE_VALUE});
+  image.removeAttribute('style');
+  image.className = 'img-upload__preview effects__preview--none';
+  defaultScale = DEFAULT_TRANSFORM_VALUE;
+  defaultScaleValue = DEFAULT_SCALE_VALUE;
+  scaleValue.setAttribute('value', `${defaultScaleValue}%`);
+}
+
+export {editorReset};

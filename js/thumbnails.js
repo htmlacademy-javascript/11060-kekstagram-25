@@ -1,14 +1,14 @@
-import {createSimilarPhotoObjects} from './data.js';
 import {createPopup} from './modal.js';
+import {getData} from './api.js';
 
 const thumbnailsList = document.querySelector('.pictures');
 const similarThumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const similarThumbnails = createSimilarPhotoObjects();
 const thumbnailsListFragment = document.createDocumentFragment();
 
-similarThumbnails.forEach((thumbnail) => {
+function createThumbnail (thumbnail) {
   const {url, comments, likes} = thumbnail;
   const thumbnailElement = similarThumbnailTemplate.cloneNode(true);
+
   thumbnailElement.querySelector('.picture__img').src = url;
   thumbnailElement.querySelector('.picture__comments').textContent = comments.length;
   thumbnailElement.querySelector('.picture__likes').textContent = likes;
@@ -17,8 +17,13 @@ similarThumbnails.forEach((thumbnail) => {
     createPopup(thumbnail);
   });
 
-  thumbnailsListFragment.append(thumbnailElement);
-});
+  return thumbnailsListFragment.append(thumbnailElement);
+}
 
-thumbnailsList.append(thumbnailsListFragment);
 
+const renderThumbnails = (objects) => {
+  objects.forEach(createThumbnail);
+  thumbnailsList.append(thumbnailsListFragment);
+};
+
+getData(renderThumbnails);
