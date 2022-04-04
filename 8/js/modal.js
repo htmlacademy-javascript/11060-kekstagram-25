@@ -12,6 +12,11 @@ function closePopup () {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   window.removeEventListener('keydown', onPopupEscKeydown);
+  const commentsButton = bigPicture.querySelector('.social__comments-loader');
+
+  if (commentsButton) {
+    commentsButton.remove();
+  }
 }
 
 function onPopupEscKeydown (evt) {
@@ -46,14 +51,14 @@ const createComment = (commentary) => {
 const createAllComments = (commentaries) => {
   let renderedCommentsCount = COMMENTS_COUNT_PER_STEP;
   commentsLoaderButton.remove();
-  const MORE_COMMENTS_BUTTON = createCommentButton();
+  const moreCommentsButton = createCommentButton();
 
   if (commentaries.length <= COMMENTS_COUNT_PER_STEP) {
     commentaries.forEach((commentary) => createComment(commentary));
     setCommentsCount(commentaries.length, commentaries.length);
 
   } else {
-    commentsList.insertAdjacentElement('afterend', MORE_COMMENTS_BUTTON);
+    commentsList.insertAdjacentElement('afterend', moreCommentsButton);
     setCommentsCount(renderedCommentsCount, commentaries.length);
 
     for (let i = 0; i < COMMENTS_COUNT_PER_STEP; i++) {
@@ -69,12 +74,12 @@ const createAllComments = (commentaries) => {
 
       if (renderedCommentsCount >= commentaries.length) {
         renderedCommentsCount = COMMENTS_COUNT_PER_STEP;
-        MORE_COMMENTS_BUTTON.remove();
+        moreCommentsButton.remove();
         setCommentsCount(commentaries.length, commentaries.length);
       }
     };
 
-    MORE_COMMENTS_BUTTON.addEventListener('click', createEstimatedComments);
+    moreCommentsButton.addEventListener('click', createEstimatedComments);
   }
 };
 
