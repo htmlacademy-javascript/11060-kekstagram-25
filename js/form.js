@@ -3,6 +3,7 @@ import {getHashtagErrorMessage, validateHashtag, validateCommentary} from './val
 import {sendData} from './api.js';
 import {editorReset} from './editor.js';
 
+const COMMENTARY_ERROR_MESSAGE = 'Не более 140 символов';
 const form = document.querySelector('.img-upload__form');
 const uploadFileForm = document.querySelector('#upload-file');
 const imageEditorForm = document.querySelector('.img-upload__overlay');
@@ -76,7 +77,7 @@ const pristine = new Pristine(form, {
 });
 
 pristine.addValidator(hashtagInput, validateHashtag, getHashtagErrorMessage);
-pristine.addValidator(commentaryInput, validateCommentary, 'Не более 140 символов');
+pristine.addValidator(commentaryInput, validateCommentary, COMMENTARY_ERROR_MESSAGE);
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
