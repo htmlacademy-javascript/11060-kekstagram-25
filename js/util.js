@@ -21,4 +21,15 @@ const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length 
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, getRandomArrayElement, isEscapeKey};
+const debounce = (fn, ms) => {
+  let timeout;
+  return function () {
+    const fnCall = () => {
+      fn.apply(this, arguments);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(fnCall, ms);
+  };
+};
+
+export {getRandomInteger, getRandomArrayElement, isEscapeKey, debounce};
