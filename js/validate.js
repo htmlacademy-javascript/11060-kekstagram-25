@@ -68,4 +68,4 @@ function validateCommentary (value) {
   return value.length <= MAX_COMMENTARY_LENGTH;
 }
 
-export {getHashtagErrorMessage, validateHashtag,validateCommentary};
+export {getHashtagErrorMessage, validateHashtag, validateCommentary};

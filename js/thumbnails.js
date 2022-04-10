@@ -4,13 +4,11 @@ import {getRandomArrayElement, debounce} from './util.js';
 
 const RANDOM_ARRAY_LENGTH = 10;
 const RERENDER_DELAY = 500;
+
 const thumbnailsList = document.querySelector('.pictures');
 const similarThumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const thumbnailsListFragment = document.createDocumentFragment();
-
 const filters = document.querySelector('.img-filters');
-filters.classList.remove('img-filters--inactive');
-
 const filtersButtons = document.querySelector('.img-filters__form');
 
 function createThumbnail (thumbnail) {
@@ -56,6 +54,8 @@ filtersButtons.addEventListener('click', (evt) => {
 });
 
 const renderThumbnails = (objects) => {
+  filters.classList.remove('img-filters--inactive');
+
   objects.forEach(createThumbnail);
   thumbnailsList.append(thumbnailsListFragment);
 

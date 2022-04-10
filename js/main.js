@@ -5,5 +5,4 @@ import './form.js';
 import './validate.js';
 import './editor.js';
 import './api.js';
-
-
+import './upload.js';
