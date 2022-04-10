@@ -11,12 +11,6 @@ function getRandomInteger (min, max) {
   return Math.round(min + Math.random() * (max - min));
 }
 
-function getStrLength (str, length) {
-  return str.length < length;
-}
-
-getStrLength ('Привет', 10);
-
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
@@ -32,4 +26,4 @@ const debounce = (fn, ms) => {
   };
 };
 
-export {getRandomInteger, getRandomArrayElement, isEscapeKey, debounce};
+export {getRandomArrayElement, isEscapeKey, debounce};

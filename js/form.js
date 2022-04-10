@@ -11,7 +11,6 @@ const closeImageEditorButton = document.querySelector('#upload-cancel');
 const hashtagInputTemplate = document.querySelector('.text__hashtags');
 const commentaryInputTemplate = document.querySelector('.text__description');
 const submitButton = document.querySelector('.img-upload__submit');
-
 const inputsField = document.querySelector('.img-upload__text');
 const hashtagInput = hashtagInputTemplate.cloneNode(true);
 const commentaryInput = commentaryInputTemplate.cloneNode(true);
