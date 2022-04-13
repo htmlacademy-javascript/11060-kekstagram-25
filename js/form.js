@@ -29,23 +29,14 @@ divCommentaryInputContainer.append(commentaryInput);
 form.setAttribute('action', 'https://25.javascript.pages.academy/kekstagram');
 hashtagInput.setAttribute('type', 'text');
 
-uploadFileForm.addEventListener('change', openImageEditor);
-
-function closeImageEditor () {
+const closeImageEditor = () => {
   imageEditorForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadFileForm.value = '';
   editorReset();
-}
-
-const onEditorEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeImageEditor();
-  }
 };
 
-function openImageEditor () {
+const openImageEditor = () => {
   imageEditorForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
@@ -64,7 +55,16 @@ function openImageEditor () {
       evt.stopPropagation();
     }
   });
+};
+
+function onEditorEscKeydown (evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeImageEditor();
+  }
 }
+
+uploadFileForm.addEventListener('change', openImageEditor);
 
 const pristine = new Pristine(form, {
   classTo: 'text__input-container',
@@ -88,7 +88,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-function onError () {
+const onError = () => {
   const errorTemplate = document.querySelector('#error').content;
   const error = errorTemplate.cloneNode(true);
   document.body.append(error);
@@ -114,9 +114,9 @@ function onError () {
       onErrorBlock.remove();
     }
   }, {once: true});
-}
+};
 
-function onSuccess () {
+const onSuccess = () => {
   const successTemplate = document.querySelector('#success').content;
   const success = successTemplate.cloneNode(true);
   document.body.append(success);
@@ -143,7 +143,7 @@ function onSuccess () {
       onSuccessBlock.remove();
     }
   }, {once: true});
-}
+};
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();

@@ -4,15 +4,15 @@ const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS = 5;
 const MAX_COMMENTARY_LENGTH = 140;
 
-function getHashtagErrorMessage (value) {
-  const hashtagArray = value.split(' ');
-  const uniqueHashtags = new Set(hashtagArray);
+const getHashtagErrorMessage = (value) => {
+  const hashtags = value.toLowerCase().split(' ');
+  const uniqueHashtags = new Set(hashtags);
 
-  if (hashtagArray.length > MAX_HASHTAGS) {
+  if (hashtags.length > MAX_HASHTAGS) {
     return 'Не более пяти хэштегов';
   }
 
-  for (const hashtag of hashtagArray) {
+  for (const hashtag of hashtags) {
     if (!hashtag.startsWith('#')) {
       return 'Хэштег должен начинаться с символа #';
     }
@@ -26,24 +26,24 @@ function getHashtagErrorMessage (value) {
     }
   }
 
-  if (uniqueHashtags.size !== hashtagArray.length) {
+  if (uniqueHashtags.size !== hashtags.length) {
     return 'Не должно быть одинаковых хэштегов';
   }
-}
+};
 
-function validateHashtag (value) {
-  const hashtagArray = value.split(' ');
-  const uniqueHashtags = new Set(hashtagArray);
+const validateHashtag = (value) => {
+  const hashtags = value.toLowerCase().split(' ');
+  const uniqueHashtags = new Set(hashtags);
 
   if (value === '') {
     return true;
   }
 
-  if (hashtagArray.length > MAX_HASHTAGS) {
+  if (hashtags.length > MAX_HASHTAGS) {
     return false;
   }
 
-  for (const hashtag of hashtagArray) {
+  for (const hashtag of hashtags) {
     if (!hashtag.startsWith('#')) {
       return false;
     }
@@ -57,15 +57,13 @@ function validateHashtag (value) {
     }
   }
 
-  if (uniqueHashtags.size !== hashtagArray.length) {
+  if (uniqueHashtags.size !== hashtags.length) {
     return false;
   }
 
   return true;
-}
+};
 
-function validateCommentary (value) {
-  return value.length <= MAX_COMMENTARY_LENGTH;
-}
+const validateCommentary = (value) => value.length <= MAX_COMMENTARY_LENGTH;
 
 export {getHashtagErrorMessage, validateHashtag, validateCommentary};
