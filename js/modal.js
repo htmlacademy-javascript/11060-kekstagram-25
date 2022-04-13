@@ -1,22 +1,27 @@
 import {isEscapeKey} from './util.js';
 
+const COMMENTS_COUNT_PER_STEP = 5;
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCloseButton = document.querySelector('.big-picture__cancel');
 const commentsList = bigPicture.querySelector('.social__comments');
 const commentsCount = bigPicture.querySelector('.social__comment-count');
 const commentElementTemplate = bigPicture.querySelector('.social__comment');
 const commentsLoaderButton = bigPicture.querySelector('.social__comments-loader');
-const COMMENTS_COUNT_PER_STEP = 5;
 
-function closePopup () {
+const closePopup = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   window.removeEventListener('keydown', onPopupEscKeydown);
+  bigPictureCloseButton.removeEventListener('click', onCloseButtonClick);
   const commentsButton = bigPicture.querySelector('.social__comments-loader');
 
   if (commentsButton) {
     commentsButton.remove();
   }
+};
+
+function onCloseButtonClick () {
+  closePopup();
 }
 
 function onPopupEscKeydown (evt) {
@@ -26,7 +31,7 @@ function onPopupEscKeydown (evt) {
   }
 }
 
-function createCommentButton () {
+const createCommentButton = () => {
   const button = document.createElement('button');
   button.type = 'button';
   button.classList.add('social__comments-loader');
@@ -34,7 +39,7 @@ function createCommentButton () {
   button.textContent = 'Загрузить еще';
 
   return button;
-}
+};
 
 const setCommentsCount = (count, commentLength) => {
   commentsCount.innerHTML = `${count} из <span class='comments-count'>${commentLength}</span> комментариев`;
@@ -96,7 +101,7 @@ const createPopup = (thumbnail) => {
   commentsList.innerHTML = '';
   createAllComments(comments);
 
-  bigPictureCloseButton.addEventListener('click', closePopup);
+  bigPictureCloseButton.addEventListener('click', onCloseButtonClick);
 
   window.addEventListener('keydown', onPopupEscKeydown);
 };

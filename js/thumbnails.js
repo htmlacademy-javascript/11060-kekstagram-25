@@ -4,14 +4,13 @@ import {getRandomArrayElement, debounce} from './util.js';
 
 const RANDOM_ARRAY_LENGTH = 10;
 const RERENDER_DELAY = 500;
-
 const thumbnailsList = document.querySelector('.pictures');
 const similarThumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const thumbnailsListFragment = document.createDocumentFragment();
 const filters = document.querySelector('.img-filters');
 const filtersButtons = document.querySelector('.img-filters__form');
 
-function createThumbnail (thumbnail) {
+const createThumbnail = (thumbnail) => {
   const {url, comments, likes} = thumbnail;
   const thumbnailElement = similarThumbnailTemplate.cloneNode(true);
 
@@ -24,28 +23,28 @@ function createThumbnail (thumbnail) {
   });
 
   return thumbnailsListFragment.append(thumbnailElement);
-}
+};
 
-function compareComments(objectA, objectB) {
+const compareComments = (objectA, objectB) => {
   const a = objectA.comments.length;
   const b = objectB.comments.length;
 
   return b - a;
-}
+};
 
-function getRandomThumbnails (array) {
-  const specialArray = [];
+const getRandomThumbnails = (array) => {
+  const uniqueThumbnails = [];
 
-  while (specialArray.length < RANDOM_ARRAY_LENGTH) {
+  while (uniqueThumbnails.length < RANDOM_ARRAY_LENGTH) {
     const item = getRandomArrayElement(array);
 
-    if (!specialArray.includes(item)) {
-      specialArray.push(item);
+    if (!uniqueThumbnails.includes(item)) {
+      uniqueThumbnails.push(item);
     }
   }
 
-  return specialArray;
-}
+  return uniqueThumbnails;
+};
 
 filtersButtons.addEventListener('click', (evt) => {
   const children = Array.from(evt.currentTarget.children);

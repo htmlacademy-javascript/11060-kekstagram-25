@@ -1,11 +1,7 @@
-const scaleUpButton = document.querySelector('.scale__control--bigger');
-const scaleDownButton = document.querySelector('.scale__control--smaller');
-const scaleValue = document.querySelector('.scale__control--value');
-const image = document.querySelector('.img-upload__preview');
-const sliderElement = document.querySelector('.effect-level__slider');
-const effectsList = document.querySelector('.img-upload__effects');
-const effectsSliderContainer = document.querySelector('.img-upload__effect-level');
-const effectLevel = document.querySelector('.effect-level__value');
+const DEFAULT_SCALE_VALUE = 100;
+const DEFAULT_TRANSFORM_VALUE = 1;
+const TRANSFORM_STEP = 0.25;
+const SCALE_VALUE_STEP = 25;
 
 const filtersMap = {
   none: {
@@ -55,24 +51,30 @@ const filtersEffects = {
   heat: 'brightness',
 };
 
-const DEFAULT_SCALE_VALUE = 100;
-const DEFAULT_TRANSFORM_VALUE = 1;
+const scaleUpButton = document.querySelector('.scale__control--bigger');
+const scaleDownButton = document.querySelector('.scale__control--smaller');
+const scaleValue = document.querySelector('.scale__control--value');
+const image = document.querySelector('.img-upload__preview img');
+const sliderElement = document.querySelector('.effect-level__slider');
+const effectsList = document.querySelector('.img-upload__effects');
+const effectsSliderContainer = document.querySelector('.img-upload__effect-level');
+const effectLevel = document.querySelector('.effect-level__value');
 
 scaleValue.removeAttribute('readonly');
 
-let defaultScaleValue = 100;
+let defaultScaleValue = DEFAULT_SCALE_VALUE;
 scaleValue.setAttribute('value', `${defaultScaleValue}%`);
 
-let defaultScale = 1;
+let defaultScale = DEFAULT_TRANSFORM_VALUE;
 image.style.transform = `scale(${defaultScale})`;
 
 scaleDownButton.addEventListener('click', () => {
-  defaultScaleValue -= 25;
-  defaultScale -= 0.25;
+  defaultScaleValue -= SCALE_VALUE_STEP;
+  defaultScale -= TRANSFORM_STEP;
 
-  if (defaultScaleValue <= 25 && defaultScale <= 0.25) {
-    defaultScaleValue = 25;
-    defaultScale = 0.25;
+  if (defaultScaleValue <= SCALE_VALUE_STEP && defaultScale <= TRANSFORM_STEP) {
+    defaultScaleValue = SCALE_VALUE_STEP;
+    defaultScale = TRANSFORM_STEP;
   }
 
   scaleValue.setAttribute('value', `${defaultScaleValue}%`);
@@ -80,12 +82,12 @@ scaleDownButton.addEventListener('click', () => {
 });
 
 scaleUpButton.addEventListener('click', () => {
-  defaultScaleValue += 25;
-  defaultScale += 0.25;
+  defaultScaleValue += SCALE_VALUE_STEP;
+  defaultScale += TRANSFORM_STEP;
 
-  if (defaultScaleValue >= 100 && defaultScale >= 1) {
-    defaultScaleValue = 100;
-    defaultScale = 1;
+  if (defaultScaleValue >= DEFAULT_SCALE_VALUE && defaultScale >= DEFAULT_TRANSFORM_VALUE) {
+    defaultScaleValue = DEFAULT_SCALE_VALUE;
+    defaultScale = DEFAULT_TRANSFORM_VALUE;
   }
 
   scaleValue.setAttribute('value', `${defaultScaleValue}%`);
@@ -104,8 +106,12 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-function onFilterListClick (evt) {
-  image.className = `img-upload__preview effects__preview--${evt.target.value}`;
+const filterListChangeHandler = (evt) => {
+  image.className = `effects__preview--${evt.target.value}`;
+  scaleValue.setAttribute('value', `${DEFAULT_SCALE_VALUE}%`);
+  image.style.transform = `scale(${DEFAULT_TRANSFORM_VALUE})`;
+  defaultScale = DEFAULT_TRANSFORM_VALUE;
+  defaultScaleValue = DEFAULT_SCALE_VALUE;
 
   if (evt.target.value === 'none') {
     effectsSliderContainer.classList.add('hidden');
@@ -130,24 +136,24 @@ function onFilterListClick (evt) {
       image.style.filter = `${filtersEffects[evt.target.value]}(${effectValue}${filtersMap[evt.target.value].points})`;
 
       if (evt.target.value === 'none' && image.style.filter) {
-        image.removeAttribute('style');
+        image.style.filter = '';
       }
     });
   }
-}
+};
 
-effectsList.addEventListener('click', onFilterListClick);
+effectsList.addEventListener('click', filterListChangeHandler);
 
-function editorReset () {
+const editorReset = () => {
   effectsSliderContainer.classList.add('hidden');
   scaleValue.setAttribute('value', `${DEFAULT_SCALE_VALUE}%`);
   effectLevel.setAttribute('value', DEFAULT_SCALE_VALUE);
   sliderElement.noUiSlider.updateOptions({start: DEFAULT_SCALE_VALUE});
   image.removeAttribute('style');
-  image.className = 'img-upload__preview effects__preview--none';
+  image.className = 'effects__preview--none';
   defaultScale = DEFAULT_TRANSFORM_VALUE;
   defaultScaleValue = DEFAULT_SCALE_VALUE;
   scaleValue.setAttribute('value', `${defaultScaleValue}%`);
-}
+};
 
 export {editorReset};
