@@ -36,6 +36,13 @@ const closeImageEditor = () => {
   editorReset();
 };
 
+const onEditorEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeImageEditor();
+  }
+};
+
 const openImageEditor = () => {
   imageEditorForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -56,13 +63,6 @@ const openImageEditor = () => {
     }
   });
 };
-
-function onEditorEscKeydown (evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeImageEditor();
-  }
-}
 
 uploadFileForm.addEventListener('change', openImageEditor);
 

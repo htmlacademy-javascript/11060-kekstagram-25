@@ -106,7 +106,7 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-const filterListChangeHandler = (evt) => {
+const effectsListClickHandler = (evt) => {
   image.className = `effects__preview--${evt.target.value}`;
   scaleValue.setAttribute('value', `${DEFAULT_SCALE_VALUE}%`);
   image.style.transform = `scale(${DEFAULT_TRANSFORM_VALUE})`;
@@ -142,7 +142,7 @@ const filterListChangeHandler = (evt) => {
   }
 };
 
-effectsList.addEventListener('click', filterListChangeHandler);
+effectsList.addEventListener('click', effectsListClickHandler);
 
 const editorReset = () => {
   effectsSliderContainer.classList.add('hidden');
